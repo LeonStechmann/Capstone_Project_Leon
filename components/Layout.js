@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import {Navigation} from "./Navbar";
+import {Navbar} from "./Navbar";
 
 const Layout = ({children}) => {
   return (
     <>
       <StyledHeading>Kneipen-Tour App</StyledHeading>
       {children}
-      <Navigation />
+      <Navbar />
     </>
   );
 };

@@ -5,7 +5,7 @@ import {faHouse} from "@fortawesome/free-solid-svg-icons";
 import {faRoute} from "@fortawesome/free-solid-svg-icons";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 
-export function Navigation() {
+export default function Navbar() {
   return (
     <Navbar>
       <NavList>
