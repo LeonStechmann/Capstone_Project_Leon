@@ -11,17 +11,17 @@ export function Navigation() {
       <NavList>
         <ListItems>
           <Link href="/">
-            <FontAwesomeIcon icon={faHouse} />
+            <FontAwesomeIcon icon={faHouse} alt="home icon" />
           </Link>
         </ListItems>
         <ListItems>
           <Link href="/route">
-            <FontAwesomeIcon icon={faRoute} />
+            <FontAwesomeIcon icon={faRoute} alt="route icon" />
           </Link>
         </ListItems>
         <ListItems>
           <Link href="/previous-routes">
-            <FontAwesomeIcon icon={faBars} />
+            <FontAwesomeIcon icon={faBars} alt="menu icon" />
           </Link>
         </ListItems>
       </NavList>
