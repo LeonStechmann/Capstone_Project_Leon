@@ -1,27 +1,42 @@
 import styled from "styled-components";
 import Link from "next/link";
+import {useRouter} from "next/router";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHouse} from "@fortawesome/free-solid-svg-icons";
 import {faRoute} from "@fortawesome/free-solid-svg-icons";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 
-export function Navigation() {
+export default function Navigation() {
+  const router = useRouter();
+
   return (
     <Navbar>
       <NavList>
         <ListItems>
           <Link href="/">
-            <FontAwesomeIcon icon={faHouse} title="home icon" />
+            <FontAwesomeIcon
+              icon={faHouse}
+              title="home icon"
+              color={router.pathname === "/" ? "black" : "grey"}
+            />
           </Link>
         </ListItems>
         <ListItems>
           <Link href="/route">
-            <FontAwesomeIcon icon={faRoute} title="route icon" />
+            <FontAwesomeIcon
+              icon={faRoute}
+              title="route icon"
+              color={router.pathname === "/route" ? "black" : "grey"}
+            />
           </Link>
         </ListItems>
         <ListItems>
           <Link href="/previous-routes">
-            <FontAwesomeIcon icon={faBars} title="menu icon" />
+            <FontAwesomeIcon
+              icon={faBars}
+              title="menu icon"
+              color={router.pathname === "/previous-routes" ? "black" : "grey"}
+            />
           </Link>
         </ListItems>
       </NavList>
