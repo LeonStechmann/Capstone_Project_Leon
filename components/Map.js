@@ -1,11 +1,14 @@
-import {GoogleMap, useLoadScript, Marker} from "@react-google-maps/api";
+import {GoogleMap, Marker} from "@react-google-maps/api";
+import {useMemo} from "react";
 
-export default function Map({userLat, userLng}) {
-  const {isLoaded} = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-  });
-
-  if (!isLoaded) return <h1>Loading...</h1>;
+export default function Map({userLat, userLng, selected, selectedDest}) {
+  const options = useMemo(
+    () => ({
+      disableDefaultUI: true,
+      clickableIcons: false,
+    }),
+    []
+  );
   if (userLat && userLng)
     return (
       <>
@@ -16,8 +19,11 @@ export default function Map({userLat, userLng}) {
             height: "30vh",
             width: "80%",
           }}
+          options={options}
         >
           <Marker position={{lat: userLat, lng: userLng}} />
+          {selected && <Marker position={selected} />}
+          {selectedDest && <Marker position={selectedDest} />}
         </GoogleMap>
       </>
     );

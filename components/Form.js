@@ -1,26 +1,18 @@
 import styled from "styled-components";
+import PlacesAutocomplete from "./PlacesAutoComplete";
+import {useState} from "react";
 
-export function FormHome() {
+export function FormHome({setSelected, setSelectedDest}) {
+  const [positionStatus, setPositionStatus] = useState(null);
   return (
     <FormContainer method="get">
       <span>Starting Point:</span>
-      <label htmlFor="start">
-        <input
-          type="text"
-          name="start"
-          required
-          placeholder="Musterstraße 12"
-        />
-      </label>
+      <PlacesAutocomplete setSelected={setSelected} positionStatus={"Start"} />
       <span>Destination:</span>
-      <label htmlFor="destination">
-        <input
-          type="text"
-          name="destination"
-          id="destination"
-          placeholder="Zielstraße 15"
-        />
-      </label>
+      <PlacesAutocomplete
+        setSelectedDest={setSelectedDest}
+        positionStatus={"Dest"}
+      />
       <span>Amount of stops:</span>
       <label htmlFor="stops">
         <input type="number" name="stops" id="stops" required />
