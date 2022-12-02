@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import PlacesAutocomplete from "./PlacesAutoComplete";
-import {useState} from "react";
 
 export function FormHome({setSelected, setSelectedDest}) {
-  const [positionStatus, setPositionStatus] = useState(null);
   return (
     <FormContainer method="get">
       <span>Starting Point:</span>

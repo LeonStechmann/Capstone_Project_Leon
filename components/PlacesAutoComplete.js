@@ -26,8 +26,6 @@ const PlacesAutocomplete = ({setSelected, setSelectedDest, positionStatus}) => {
 
     const results = await getGeocode({address});
     const {lat, lng} = await getLatLng(results[0]);
-    //turnery nach prop aus dem Input field von Form
-    console.log(positionStatus);
     if (positionStatus === "Start") setSelected({lat, lng});
     if (positionStatus === "Dest") setSelectedDest({lat, lng});
   };
