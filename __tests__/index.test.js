@@ -1,10 +1,11 @@
 import {render, screen} from "@testing-library/react";
-import Home from "../pages/index";
+
+import PastRoutes from "../pages/previous-routes";
 import "@testing-library/jest-dom";
 
-describe("Home", () => {
-  it("renders home h1", () => {
-    render(<Home />);
+describe("PasRoutes", () => {
+  it("renders invisible h1.", () => {
+    render(<PastRoutes />);
 
     const heading = screen.getByRole("heading");
 
