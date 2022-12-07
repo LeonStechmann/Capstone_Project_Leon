@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import Map from "../components/Map";
 import {FormHome} from "../components/Form";
 import {useLoadScript} from "@react-google-maps/api";

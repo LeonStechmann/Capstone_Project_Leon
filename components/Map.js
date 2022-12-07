@@ -4,9 +4,8 @@ import {useState, useEffect, useMemo} from "react";
 export default function Map({selected, selectedDest}) {
   const [status, setStatus] = useState(null);
   const [center, setCenter] = useState(null);
-  const [map, setMap] = useState(null);
   const [bars, setBars] = useState(null);
-
+  const [markerClicked, setmMarkerClicked] = useState(null);
   const options = useMemo(
     () => ({
       disableDefaultUI: true,
@@ -24,7 +23,6 @@ export default function Map({selected, selectedDest}) {
         position => {
           setStatus(null);
           setCenter({
-            ...center,
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           });
@@ -37,8 +35,6 @@ export default function Map({selected, selectedDest}) {
   }, []);
 
   const onLoad = map => {
-    setMap(map);
-
     const request = {
       location: center,
       radius: "500",
@@ -52,6 +48,10 @@ export default function Map({selected, selectedDest}) {
         setBars(results);
       }
     }
+  };
+
+  const handleMarkerClicked = id => {
+    setmMarkerClicked(id);
   };
 
   return (
@@ -71,16 +71,27 @@ export default function Map({selected, selectedDest}) {
             bars.map(bar => {
               return (
                 <>
-                  <Marker key={bar.place_id} position={bar.geometry.location} />
+                  <Marker
+                    onClick={() => handleMarkerClicked(bar.place_id)}
+                    key={bar.place_id}
+                    position={bar.geometry.location}
+                  />
+                  {markerClicked === bar.place_id && (
+                    <InfoWindow position={bar.geometry.location}>
+                      <div>
+                        <p>Name:{bar.name}</p>
+                        <p>Rating:{bar.rating}</p>
+                        <p>Adress:{bar.vicinity}</p>
+                      </div>
+                    </InfoWindow>
+                  )}
                 </>
               );
             })}
 
-          <Marker key={1} label={"You"} position={center} />
-          {selected && <Marker key={2} label={"Start"} position={selected} />}
-          {selectedDest && (
-            <Marker key={3} label={"End"} position={selectedDest} />
-          )}
+          <Marker label={"You"} position={center} />
+          {selected && <Marker label={"Start"} position={selected} />}
+          {selectedDest && <Marker label={"End"} position={selectedDest} />}
         </GoogleMap>
       )}
       <p>{status}</p>
