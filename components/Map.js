@@ -5,7 +5,8 @@ export default function Map({selected, selectedDest}) {
   const [status, setStatus] = useState(null);
   const [center, setCenter] = useState(null);
   const [bars, setBars] = useState(null);
-  const [markerClicked, setmMarkerClicked] = useState(null);
+  const [markerClicked, setMarkerClicked] = useState(null);
+
   const options = useMemo(
     () => ({
       disableDefaultUI: true,
@@ -51,7 +52,7 @@ export default function Map({selected, selectedDest}) {
   };
 
   const handleMarkerClicked = id => {
-    setmMarkerClicked(id);
+    setMarkerClicked(id);
   };
 
   return (
@@ -88,8 +89,15 @@ export default function Map({selected, selectedDest}) {
                 </>
               );
             })}
-
-          <Marker label={"You"} position={center} />
+          <Marker
+            icon={{
+              path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+              scale: 7,
+              strokeColor: "green",
+            }}
+            label={"You"}
+            position={center}
+          />
           {selected && <Marker label={"Start"} position={selected} />}
           {selectedDest && <Marker label={"End"} position={selectedDest} />}
         </GoogleMap>
