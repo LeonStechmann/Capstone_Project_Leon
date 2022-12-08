@@ -49,7 +49,14 @@ export default function Map({selected, selectedDest, radius}) {
 
     function callback(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        setBars(results.filter(bar => !bar.types.includes("restaurant")));
+        console.log(results);
+        setBars(
+          results.filter(
+            bar =>
+              !bar.types.includes("restaurant") &&
+              bar.business_status === "OPERATIONAL"
+          )
+        );
       }
     }
   };
