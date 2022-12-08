@@ -7,7 +7,7 @@ import {useLoadScript} from "@react-google-maps/api";
 export default function Home() {
   const [selected, setSelected] = useState(null);
   const [selectedDest, setSelectedDest] = useState(null);
-  const [radius, setRadius] = useState("500");
+  const [radius, setRadius] = useState(500);
 
   const {isLoaded} = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,

@@ -7,6 +7,8 @@ export default function Map({selected, selectedDest, radius}) {
   const [bars, setBars] = useState(null);
   const [markerClicked, setMarkerClicked] = useState(null);
 
+  const google = window.google;
+
   const options = useMemo(
     () => ({
       mapId: "85f5ea377099f185",
@@ -47,8 +49,7 @@ export default function Map({selected, selectedDest, radius}) {
 
     function callback(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        setBars(results);
-        console.log(results);
+        setBars(results.filter(bar => !bar.types.includes("restaurant")));
       }
     }
   };
@@ -93,11 +94,7 @@ export default function Map({selected, selectedDest, radius}) {
           options={options}
           onLoad={onLoad}
         >
-          <Circle
-            center={center}
-            radius={Number(radius)}
-            options={circleOptions}
-          />
+          <Circle center={center} radius={radius} options={circleOptions} />
 
           {bars &&
             bars.map(bar => {
@@ -117,7 +114,7 @@ export default function Map({selected, selectedDest, radius}) {
                         <p>
                           {bar.rating}⭐({bar.user_ratings_total})
                         </p>
-                        <p>{bar.isOpen}</p>
+                        <p>{bar.isOpen ? "open" : "closed"}</p>
                         <p>{bar.vicinity}</p>
                       </div>
                     </InfoWindow>
