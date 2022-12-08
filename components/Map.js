@@ -5,6 +5,7 @@ export default function Map({selected, selectedDest, radius}) {
   const [status, setStatus] = useState(null);
   const [center, setCenter] = useState(null);
   const [bars, setBars] = useState(null);
+  const [map, setMap] = useState(null);
   const [markerClicked, setMarkerClicked] = useState(null);
 
   const google = window.google;
@@ -17,6 +18,28 @@ export default function Map({selected, selectedDest, radius}) {
     }),
     []
   );
+
+  const markerIconBar = {
+    url: "../assets/beericon.svg",
+    scaledSize: new google.maps.Size(30, 30),
+  };
+
+  const markerIconLocation = {
+    url: "../assets/currentlocation.svg",
+    scaledSize: new google.maps.Size(40, 40),
+  };
+
+  const markerIconDest = {
+    url: "../assets/goal.svg",
+    scaledSize: new google.maps.Size(30, 30),
+  };
+
+  const circleOptions = {
+    fillColor: "green",
+    fillOpacity: 0.05,
+    strokeWeight: 3,
+    strokeOpacity: 0.3,
+  };
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -38,9 +61,13 @@ export default function Map({selected, selectedDest, radius}) {
     }
   }, []);
 
-  const onLoad = map => {
+  const onLoadMap = map => {
+    setMap(map);
+  };
+
+  const onLoadStartMarker = () => {
     const request = {
-      location: center,
+      location: selected,
       radius: radius,
       type: ["bar"],
     };
@@ -65,28 +92,6 @@ export default function Map({selected, selectedDest, radius}) {
     setMarkerClicked(id);
   };
 
-  const markerIconBar = {
-    url: "../assets/beericon.svg",
-    scaledSize: new google.maps.Size(30, 30),
-  };
-
-  const markerIconLocation = {
-    url: "../assets/currentlocation.svg",
-    scaledSize: new google.maps.Size(40, 40),
-  };
-
-  const markerIconDest = {
-    url: "../assets/goal.svg",
-    scaledSize: new google.maps.Size(30, 30),
-  };
-
-  const circleOptions = {
-    fillColor: "green",
-    fillOpacity: 0.05,
-    strokeWeight: 3,
-    strokeOpacity: 0.3,
-  };
-
   return (
     <>
       {center && (
@@ -99,9 +104,11 @@ export default function Map({selected, selectedDest, radius}) {
             width: "80%",
           }}
           options={options}
-          onLoad={onLoad}
+          onLoad={onLoadMap}
         >
-          <Circle center={center} radius={radius} options={circleOptions} />
+          {selected && (
+            <Circle center={selected} radius={radius} options={circleOptions} />
+          )}
 
           {bars &&
             bars.map(bar => {
@@ -130,7 +137,9 @@ export default function Map({selected, selectedDest, radius}) {
               );
             })}
           <Marker icon={markerIconLocation} position={center} />
-          {selected && <Marker position={selected} />}
+          {selected && (
+            <Marker onLoad={onLoadStartMarker} position={selected} />
+          )}
           {selectedDest && (
             <Marker icon={markerIconDest} position={selectedDest} />
           )}
