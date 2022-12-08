@@ -15,6 +15,10 @@ export function FormHome({setSelected, setSelectedDest}) {
       <label htmlFor="stops">
         <input type="number" name="stops" id="stops" required />
       </label>
+      <span>Set radius:</span>
+      <label htmlFor="radius">
+        <input type="number" name="radius" id="radius" required />
+      </label>
       <StyledButton type="submit">Submit</StyledButton>
     </FormContainer>
   );
