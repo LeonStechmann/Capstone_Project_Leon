@@ -179,16 +179,6 @@ export default function Map({
     setDirectionsResponse(results);
   };
 
-  const logfunction = () => {
-    console.log("bars");
-    console.log(bars);
-    console.log("directionsResponse");
-    console.log(directionsResponse);
-    console.log("waypoints");
-    console.log(waypoints);
-    console.log(directionsResponse.routes[0].legs[0].distance.text);
-  };
-
   if (!isLoaded) return "Loading Map...";
 
   return (
@@ -253,7 +243,6 @@ export default function Map({
         </LocateButton>
       </GoogleMap>
 
-      <button onClick={logfunction}>log mich</button>
       <button
         onClick={handleAddMoreBarsClicked}
         disabled={!pagination || !pagination.hasNextPage}
