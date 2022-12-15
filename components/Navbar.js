@@ -49,6 +49,7 @@ const Navbar = styled.nav`
   position: fixed;
   bottom: 0;
   width: 100%;
+  background-color: white;
 `;
 
 const NavList = styled.ul`

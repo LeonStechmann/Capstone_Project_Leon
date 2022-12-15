@@ -10,8 +10,9 @@ function MyApp({Component, pageProps}) {
   const [selectedDest, setSelectedDest] = useState(null);
   const [radius, setRadius] = useState(0);
   const [stops, setStops] = useState(0);
-  const [bars, setBars] = useState(null);
+  const [bars, setBars] = useState([]);
   const [waypoints, setWaypoints] = useState([]);
+  const [directionsResponse, setDirectionsResponse] = useState(null);
 
   const {isLoaded} = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -37,6 +38,8 @@ function MyApp({Component, pageProps}) {
           setBars={setBars}
           waypoints={waypoints}
           setWaypoints={setWaypoints}
+          directionsResponse={directionsResponse}
+          setDirectionsResponse={setDirectionsResponse}
         />
       </Layout>
     </>

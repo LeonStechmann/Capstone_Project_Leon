@@ -1,6 +1,20 @@
 import styled from "styled-components";
+import {Fragment} from "react";
 
-export default function BarDetails({bars, waypoints, setWaypoints}) {
+export default function BarDetails({
+  bars,
+  waypoints,
+  setWaypoints,
+  directionsResponse,
+}) {
+  const checkIncludesWaypoint = bar => {
+    return waypoints.some(
+      waypoint =>
+        waypoint.location.lat === bar.geometry.location.lat() &&
+        waypoint.location.lng === bar.geometry.location.lng()
+    );
+  };
+
   const handleDeleteWaypointFromRoute = location => {
     const waypointIndex = waypoints.findIndex(waypoint => {
       return (
@@ -21,61 +35,56 @@ export default function BarDetails({bars, waypoints, setWaypoints}) {
   };
 
   return (
-    <>
-      <BarDetailsContainer>
-        {waypoints &&
-          bars.map((bar, index) => {
-            return (
-              <>
-                <StyledDetailCard
-                  isWaypoint={waypoints.findIndex(waypoint => {
-                    return (
-                      bar.geometry.location.lat() === waypoint.location.lat &&
-                      bar.geometry.location.lng() === waypoint.location.lng
-                    );
-                  })}
-                >
-                  {waypoints.findIndex(waypoint => {
-                    return (
-                      bar.geometry.location.lat() === waypoint.location.lat &&
-                      bar.geometry.location.lng() === waypoint.location.lng
-                    );
-                  }) == -1 ? (
-                    <AddBarFromBarsToRouteButton
-                      onClick={() =>
-                        handleAddBarFromBarsToRoute({
-                          lat: bar.geometry.location.lat(),
-                          lng: bar.geometry.location.lng(),
-                        })
-                      }
-                    >
-                      +
-                    </AddBarFromBarsToRouteButton>
-                  ) : (
-                    <DeleteBarFromRouteButton
-                      onClick={() =>
-                        handleDeleteWaypointFromRoute({
-                          lat: bar.geometry.location.lat(),
-                          lng: bar.geometry.location.lng(),
-                        })
-                      }
-                    >
-                      X
-                    </DeleteBarFromRouteButton>
-                  )}
-                  <h2>{index + 1} .Stop</h2>
-                  <h3>{bar.name}</h3>
-
+    <BarDetailsContainer>
+      {waypoints &&
+        bars.map((bar, index) => {
+          return (
+            <Fragment key={`${bar.place_id}_${index}`}>
+              <StyledDetailCard isWaypoint={checkIncludesWaypoint(bar)}>
+                {!checkIncludesWaypoint(bar) ? (
+                  <AddOrDeleteButton
+                    onClick={() =>
+                      handleAddBarFromBarsToRoute({
+                        lat: bar.geometry.location.lat(),
+                        lng: bar.geometry.location.lng(),
+                      })
+                    }
+                  >
+                    +
+                  </AddOrDeleteButton>
+                ) : (
+                  <AddOrDeleteButton
+                    onClick={() =>
+                      handleDeleteWaypointFromRoute({
+                        lat: bar.geometry.location.lat(),
+                        lng: bar.geometry.location.lng(),
+                      })
+                    }
+                  >
+                    X
+                  </AddOrDeleteButton>
+                )}
+                <h2>{index + 1} .Stop</h2>
+                <h3>{bar.name}</h3>
+                <p>
+                  {bar.rating}⭐({bar.user_ratings_total})
+                </p>
+                <p>{bar.vicinity}</p>
+              </StyledDetailCard>
+              {directionsResponse && checkIncludesWaypoint(bar) && (
+                <DistanceContainer>
                   <p>
-                    {bar.rating}⭐({bar.user_ratings_total})
+                    {`Distance: ${directionsResponse.routes[0].legs[index].distance.text} `}
+                    <span>
+                      ({directionsResponse.routes[0].legs[index].duration.text})
+                    </span>
                   </p>
-                  <p>{bar.vicinity}</p>
-                </StyledDetailCard>
-              </>
-            );
-          })}
-      </BarDetailsContainer>
-    </>
+                </DistanceContainer>
+              )}
+            </Fragment>
+          );
+        })}
+    </BarDetailsContainer>
   );
 }
 
@@ -88,18 +97,17 @@ const BarDetailsContainer = styled.div`
 
 const StyledDetailCard = styled.article`
   border: 2px solid black;
+  padding-left: 1em;
   ${props =>
-    props.isWaypoint !== -1
-      ? "background-color: green"
-      : "background-color: red"};
+    props.isWaypoint ? "background-color: green" : "background-color: red"};
 `;
 
-const DeleteBarFromRouteButton = styled.button`
+const AddOrDeleteButton = styled.button`
   position: absolute;
   right: 9.45%;
 `;
 
-const AddBarFromBarsToRouteButton = styled.button`
-  position: absolute;
-  right: 9.45%;
+const DistanceContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
 `;

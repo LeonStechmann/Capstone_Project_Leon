@@ -12,27 +12,34 @@ export default function CurrentRoute({
   waypoints,
   setBars,
   setWaypoints,
+  directionsResponse,
+  setDirectionsResponse,
 }) {
   return (
     <>
       <RouteContainer>
         <h1>CurrentRoute</h1>
-        <Map
-          isLoaded={isLoaded}
-          selected={selected}
-          selectedDest={selectedDest}
-          radius={radius}
-          stops={stops}
-          bars={bars}
-          waypoints={waypoints}
-          setBars={setBars}
-          setWaypoints={setWaypoints}
-        />
+        {isLoaded && (
+          <Map
+            isLoaded={isLoaded}
+            selected={selected}
+            selectedDest={selectedDest}
+            radius={radius}
+            stops={stops}
+            bars={bars}
+            waypoints={waypoints}
+            setBars={setBars}
+            setWaypoints={setWaypoints}
+            directionsResponse={directionsResponse}
+            setDirectionsResponse={setDirectionsResponse}
+          />
+        )}
         {bars && (
           <BarDetails
             bars={bars}
             waypoints={waypoints}
             setWaypoints={setWaypoints}
+            directionsResponse={directionsResponse}
           />
         )}
       </RouteContainer>
