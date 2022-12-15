@@ -1,35 +1,33 @@
 import styled from "styled-components";
-import {useState} from "react";
-import Map from "../components/Map";
+import Link from "next/link";
 import {FormHome} from "../components/Form";
-import {useLoadScript} from "@react-google-maps/api";
 
-export default function Home() {
-  const [selected, setSelected] = useState(null);
-  const [selectedDest, setSelectedDest] = useState(null);
-  const [radius, setRadius] = useState(500);
-
-  const {isLoaded} = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
-  });
-
+export default function Home({
+  isLoaded,
+  setSelected,
+  setSelectedDest,
+  radius,
+  setRadius,
+  stops,
+  setStops,
+}) {
   return (
     <HomeContainer>
       {isLoaded ? (
         <FormHome
           setSelected={setSelected}
           setSelectedDest={setSelectedDest}
+          radius={radius}
           setRadius={setRadius}
+          stops={stops}
+          setStops={setStops}
         />
       ) : (
         "Loading..."
-      )}
-      {isLoaded ? (
-        <Map selected={selected} selectedDest={selectedDest} radius={radius} />
-      ) : (
-        "Loading..."
-      )}
+      )}{" "}
+      <Link href="/route">
+        <StyledButton>Plan Route</StyledButton>
+      </Link>
     </HomeContainer>
   );
 }
@@ -38,5 +36,18 @@ const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10vh;
+  gap: 30px;
+`;
+
+const StyledButton = styled.button`
+  box-sizing: border-box;
+  background-color: #fff000;
+  border-radius: 12px;
+  border: 0;
+  color: #000;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  padding: 10px 15px;
+  width: 60%;
 `;
