@@ -1,6 +1,13 @@
 import styled from "styled-components";
 import PlacesAutocomplete from "./PlacesAutoComplete";
-import {Slider, SliderMarker} from "@reach/slider";
+import {
+  Slider,
+  SliderInput,
+  SliderTrack,
+  SliderRange,
+  SliderHandle,
+  SliderMarker,
+} from "@reach/slider";
 import "@reach/slider/styles.css";
 
 export function FormHome({
@@ -20,41 +27,38 @@ export function FormHome({
   };
   return (
     <FormContainer method="get">
-      <span>Starting Point:</span>
+      <StyledSpan>Starting Point:</StyledSpan>
       <PlacesAutocomplete setSelected={setSelected} positionStatus={"Start"} />
-      <span>Destination:</span>
+      <StyledSpan>Destination:</StyledSpan>
       <PlacesAutocomplete
         setSelectedDest={setSelectedDest}
         positionStatus={"Dest"}
       />
-      <span>Amount of stops:</span>
-      <StyledSlider
+      <StyledSpan>Bars: {stops}</StyledSpan>
+      <StyledSliderInput
         min={0}
         max={25}
         value={stops}
         onChange={newValue => handleChangeStops(newValue)}
       >
-        {new Array(26).fill("x").map((x, index) => (
-          <SliderMarker value={index * 5} key={index}>
-            <span>{index * 5}</span>
-          </SliderMarker>
-        ))}
-      </StyledSlider>
-      <span>Set radius:</span>
-      <StyledSlider
+        <SliderTrack>
+          <StyledSliderRange></StyledSliderRange>
+          <StyledSliderHandle />
+        </SliderTrack>
+      </StyledSliderInput>
+      <StyledSpan>Radius: {radius}m</StyledSpan>
+      <StyledSliderInput
         min={0}
         max={4000}
         step={500}
-        defaultValue={0}
         value={radius}
         onChange={newValue => handleChangeRadius(newValue)}
       >
-        {new Array(11).fill("x").map((x, index) => (
-          <SliderMarker value={index * 1000} key={index * 1000}>
-            <span>{index * 1}km</span>
-          </SliderMarker>
-        ))}
-      </StyledSlider>
+        <SliderTrack>
+          <StyledSliderRange />
+          <StyledSliderHandle />
+        </SliderTrack>
+      </StyledSliderInput>
     </FormContainer>
   );
 }
@@ -63,9 +67,23 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 30px;
 `;
 
-const StyledSlider = styled(Slider)`
+const StyledSliderInput = styled(SliderInput)`
   width: 60vw;
+`;
+
+const StyledSliderHandle = styled(SliderHandle)`
+  background-color: var(--black);
+  border: 2px solid white;
+  width: 1.5em;
+`;
+
+const StyledSliderRange = styled(SliderRange)`
+  background-color: var(--yellow);
+`;
+
+const StyledSpan = styled.span`
+  font-size: 1.2rem;
 `;

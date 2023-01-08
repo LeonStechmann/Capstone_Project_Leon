@@ -10,14 +10,15 @@ import {
   ComboboxOption,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
+import styled from "styled-components";
 
 const PlacesAutocomplete = ({setSelected, setSelectedDest, positionStatus}) => {
-  const handleSelected = value => {
-    setSelected(value);
+  const handleSelected = latlngObject => {
+    setSelected(latlngObject);
   };
 
-  const handleSelectedDest = value => {
-    setSelectedDest(value);
+  const handleSelectedDest = latlngObject => {
+    setSelectedDest(latlngObject);
   };
 
   const {
@@ -40,7 +41,7 @@ const PlacesAutocomplete = ({setSelected, setSelectedDest, positionStatus}) => {
 
   return (
     <Combobox onSelect={handleSelect}>
-      <ComboboxInput
+      <StyledComboboxInput
         value={value}
         onChange={e => setValue(e.target.value)}
         disabled={!ready}
@@ -48,14 +49,26 @@ const PlacesAutocomplete = ({setSelected, setSelectedDest, positionStatus}) => {
         placeholder="Search an address"
       />
       <ComboboxPopover>
-        <ComboboxList>
+        <StyledComboboxList>
           {status === "OK" &&
             data.map(({place_id, description}) => (
               <ComboboxOption key={place_id} value={description} />
             ))}
-        </ComboboxList>
+        </StyledComboboxList>
       </ComboboxPopover>
     </Combobox>
   );
 };
 export default PlacesAutocomplete;
+
+const StyledComboboxInput = styled(ComboboxInput)`
+  width: 60vw;
+  height: 4vh;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 100px;
+`;
+
+const StyledComboboxList = styled(ComboboxList)`
+  color: black;
+`;

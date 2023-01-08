@@ -8,6 +8,7 @@ import {
 import {useState, useEffect, useMemo, Fragment} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLocationArrow} from "@fortawesome/free-solid-svg-icons";
+import Barrating from "./Barrating";
 import styled from "styled-components";
 
 export default function Map({
@@ -22,12 +23,14 @@ export default function Map({
   setWaypoints,
   directionsResponse,
   setDirectionsResponse,
+  pagination,
+  setPagination,
+  isWaypoint,
 }) {
   const [status, setStatus] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [map, setMap] = useState(null);
   const [markerClicked, setMarkerClicked] = useState(null);
-  const [pagination, setPagination] = useState(null);
   const [searchresults, setSearchresults] = useState([]);
 
   const google = window.google;
@@ -52,6 +55,7 @@ export default function Map({
   const markerIconBar = {
     url: "../assets/beericon.svg",
     scaledSize: new google.maps.Size(30, 30),
+    labelOrigin: {x: 13, y: -8.5},
   };
 
   const markerIconLocation = {
@@ -70,6 +74,12 @@ export default function Map({
   }, [userLocation, map]);
 
   useEffect(() => {
+    if (!bars.some(bar => searchresults.includes(bar.place_id))) {
+      setBars([...bars, ...searchresults]);
+    }
+  }, [searchresults]);
+
+  useEffect(() => {
     getWaypoints();
   }, [bars]);
 
@@ -77,25 +87,14 @@ export default function Map({
     calculateRoute();
   }, [waypoints]);
 
-  useEffect(() => {
-    if (!bars.some(bar => bar.place_id === searchresults.place_id)) {
-      setBars([...bars, ...searchresults]);
-    }
-  }, [searchresults]);
-
   const onLoadMap = map => {
     setMap(map);
+    setBars([]);
     getNearbyBars(selected, map);
   };
 
   const handleMarkerClicked = id => {
     setMarkerClicked(id);
-  };
-
-  const handleAddMoreBarsClicked = () => {
-    if (pagination && pagination.hasNextPage) {
-      pagination.nextPage();
-    }
   };
 
   const getUserLocation = () => {
@@ -120,17 +119,29 @@ export default function Map({
 
   const getNearbyBars = (location, map) => {
     if (!location || !radius) return;
+
     const service = new google.maps.places.PlacesService(map);
     service.nearbySearch(
       {location: location, radius: radius, type: ["bar"]},
       (results, status, pagination) => {
         if (status !== "OK" || !results) return;
+
         const filteredBars = results.filter(
           bar =>
             !bar.types.includes("restaurant") &&
-            bar.business_status === "OPERATIONAL"
+            bar.business_status === "OPERATIONAL" &&
+            !bars.some(b => b.place_id === bar.place_id)
         );
-        setSearchresults(filteredBars);
+
+        const filteredBarsWithUrl = filteredBars.map(bar => {
+          return Array.isArray(bar.photos)
+            ? {
+                ...bar,
+                url: bar.photos[0].getUrl(),
+              }
+            : bar;
+        });
+        setSearchresults(filteredBarsWithUrl);
         setPagination(pagination);
       }
     );
@@ -158,16 +169,21 @@ export default function Map({
     if (stops < bars.length) {
       bars.slice(0, stops).forEach(bar => getWaypointsFromBars(bar));
     } else if (stops > bars.length) {
-      alert(
-        "Not enough bars found in your area. Please increase radius or lower the amount of stops!"
-      );
+      if (pagination && pagination.hasNextPage && stops > bars.length) {
+        pagination.nextPage();
+      } else
+        alert(
+          "Not enough bars found in your area. Please increase radius, lower the amount of stops or start your tour in a differen location."
+        );
     } else {
       bars.forEach(bar => getWaypointsFromBars(bar));
     }
   };
 
   const calculateRoute = async () => {
-    if (waypoints.length === 0) return;
+    if (!selected || !selectedDest || !waypoints || waypoints.length === 0)
+      return;
+
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
       origin: selected,
@@ -176,11 +192,11 @@ export default function Map({
       optimizeWaypoints: true,
       travelMode: google.maps.TravelMode.WALKING,
     });
+
     setDirectionsResponse(results);
   };
 
   if (!isLoaded) return "Loading Map...";
-
   return (
     <>
       <GoogleMap
@@ -188,45 +204,73 @@ export default function Map({
         zoom={14.5}
         center={selected}
         mapContainerStyle={{
-          height: "30vh",
+          height: "32vh",
           width: "80%",
+          borderRadius: "18px",
+          visibility: directionsResponse ? "100" : "0",
         }}
         options={options}
         onLoad={onLoadMap}
       >
-        {bars.length > 0 && (
+        {directionsResponse && bars.length > 0 && waypoints.length > 0 && (
           <>
             <Circle center={selected} radius={radius} options={circleOptions} />
 
             {bars.map(bar => {
-              if (
-                !waypoints.some(
-                  waypoint =>
-                    waypoint.location.lat === bar.geometry.location.lat() &&
-                    waypoint.location.lng === bar.geometry.location.lng()
-                )
-              )
-                return (
-                  <Fragment key={bar.place_id}>
-                    <Marker
-                      onClick={() => handleMarkerClicked(bar.place_id)}
-                      icon={markerIconBar}
+              return (
+                <Fragment key={bar.place_id}>
+                  <Marker
+                    onClick={() => handleMarkerClicked(bar.place_id)}
+                    icon={markerIconBar}
+                    position={bar.geometry.location}
+                    animation={google.maps.Animation.DROP}
+                    label={{
+                      text: isWaypoint(bar)
+                        ? (
+                            directionsResponse.routes[0].waypoint_order
+                              .map(
+                                index =>
+                                  waypoints.filter(w => {
+                                    return directionsResponse.request.waypoints.some(
+                                      entry =>
+                                        entry.location.location.lat() ===
+                                          w.location.lat &&
+                                        entry.location.location.lat() ===
+                                          w.location.lat
+                                    );
+                                  })[index]
+                              )
+                              .findIndex(
+                                x =>
+                                  x.location.lat ===
+                                    bar.geometry.location.lat() &&
+                                  x.location.lng === bar.geometry.location.lng()
+                              ) + 1
+                          ).toString()
+                        : " ",
+                      color: "var(--black)",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                    }}
+                  />
+                  {markerClicked === bar.place_id && (
+                    <InfoWindow
                       position={bar.geometry.location}
-                      animation={google.maps.Animation.DROP}
-                    />
-                    {markerClicked === bar.place_id && (
-                      <InfoWindow position={bar.geometry.location}>
-                        <div>
-                          <h3>{bar.name}</h3>
-                          <p>
-                            {bar.rating}⭐({bar.user_ratings_total})
-                          </p>
-                          <p>{bar.vicinity}</p>
-                        </div>
-                      </InfoWindow>
-                    )}
-                  </Fragment>
-                );
+                      options={{background: "black"}}
+                    >
+                      <InfoWindowContainer>
+                        <h3>{bar.name}</h3>
+                        <Barrating
+                          bar={bar}
+                          fillColor={"var(--yellow)"}
+                          emptyColor={"var(--black)"}
+                        />
+                        <p>{bar.vicinity}</p>
+                      </InfoWindowContainer>
+                    </InfoWindow>
+                  )}
+                </Fragment>
+              );
             })}
             {userLocation && (
               <Marker icon={markerIconLocation} position={userLocation} />
@@ -235,20 +279,23 @@ export default function Map({
             <Marker icon={markerIconDest} position={selectedDest} />
           </>
         )}
-        {directionsResponse && (
-          <DirectionsRenderer directions={directionsResponse} />
+        {directionsResponse && bars.length > 0 && (
+          <DirectionsRenderer
+            directions={directionsResponse}
+            options={{
+              suppressMarkers: true,
+              polylineOptions: {
+                strokeColor: "#0088FF",
+                strokeOpacity: 0.4,
+                strokeWeight: 5,
+              },
+            }}
+          />
         )}
         <LocateButton onClick={getUserLocation}>
           <FontAwesomeIcon icon={faLocationArrow} />
         </LocateButton>
       </GoogleMap>
-
-      <button
-        onClick={handleAddMoreBarsClicked}
-        disabled={!pagination || !pagination.hasNextPage}
-      >
-        add more Bars
-      </button>
       <p>{status}</p>
     </>
   );
@@ -260,4 +307,12 @@ const LocateButton = styled.button`
   right: 0;
   z-index: 1;
   font-size: 1.25rem;
+`;
+
+const InfoWindowContainer = styled.div`
+  color: var(--black);
+
+  > * {
+    margin: 0;
+  }
 `;
