@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import PlacesAutocomplete from "./PlacesAutoComplete";
 import {
-  Slider,
   SliderInput,
   SliderTrack,
   SliderRange,
   SliderHandle,
-  SliderMarker,
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 

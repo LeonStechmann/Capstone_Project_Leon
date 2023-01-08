@@ -18,10 +18,6 @@ export default function Heading() {
   );
 }
 
-const StyledHeading = styled.h1`
-  color: white;
-`;
-
 const HeadingContainer = styled.div`
   display: flex;
   justify-content: center;
