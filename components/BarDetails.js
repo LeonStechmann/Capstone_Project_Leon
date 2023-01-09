@@ -47,7 +47,7 @@ export default function BarDetails({bar, index, isExpanded, isWaypoint}) {
             />
             {!isLoading && isWaypoint(bar) && (
               <Challenge>
-                <span style={{fontWeight: "bold"}}>Challange:</span>
+                <span style={{fontWeight: "bold"}}>Challenge:</span>
                 <br></br>
                 {challenges.map(challenge => {
                   if (challenge.id === randomId) return challenge.challenge;
