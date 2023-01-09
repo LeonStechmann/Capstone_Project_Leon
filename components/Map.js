@@ -230,21 +230,24 @@ export default function Map({
                             directionsResponse.routes[0].waypoint_order
                               .map(
                                 index =>
-                                  waypoints.filter(w => {
+                                  bars.filter(bar => {
                                     return directionsResponse.request.waypoints.some(
                                       entry =>
                                         entry.location.location.lat() ===
-                                          w.location.lat &&
+                                          bar.geometry.location.lat() &&
                                         entry.location.location.lat() ===
-                                          w.location.lat
+                                          bar.geometry.location.lat()
                                     );
                                   })[index]
                               )
                               .findIndex(
                                 x =>
-                                  x.location.lat ===
+                                  x &&
+                                  x.geometry.location &&
+                                  x.geometry.location.lat() ===
                                     bar.geometry.location.lat() &&
-                                  x.location.lng === bar.geometry.location.lng()
+                                  x.geometry.location.lng() ===
+                                    bar.geometry.location.lng()
                               ) + 1
                           ).toString()
                         : " ",

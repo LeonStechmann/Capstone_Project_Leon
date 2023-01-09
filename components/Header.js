@@ -10,7 +10,7 @@ export default function Heading() {
         <Image
           src={planBarLogo}
           width={200}
-          height={63.66}
+          height={"auto"}
           alt={"planBar Logo"}
         />
       </HeadingContainer>

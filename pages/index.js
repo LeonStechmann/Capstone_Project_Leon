@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import Link from "next/link";
+
+import {useRouter} from "next/router";
 import {FormHome} from "../components/Form";
 import OrangeButton from "../components/OrangeButton";
 
@@ -7,11 +8,23 @@ export default function Home({
   isLoaded,
   setSelected,
   setSelectedDest,
+  setWaypoints,
+  setBars,
+  setDirectionsResponse,
   radius,
   setRadius,
   stops,
   setStops,
 }) {
+  const router = useRouter();
+
+  const handlePlanRouteClick = () => {
+    setWaypoints([]);
+    setBars([]);
+    setDirectionsResponse(null);
+    router.push("/route");
+  };
+
   return (
     <HomeContainer>
       {isLoaded ? (
@@ -26,9 +39,12 @@ export default function Home({
       ) : (
         "Loading..."
       )}
-      <Link href="/route">
-        <OrangeButton text={"Plan Route"} name={"plan"} />
-      </Link>
+
+      <OrangeButton
+        text={"Plan Route"}
+        name={"plan"}
+        onClick={() => handlePlanRouteClick()}
+      />
     </HomeContainer>
   );
 }

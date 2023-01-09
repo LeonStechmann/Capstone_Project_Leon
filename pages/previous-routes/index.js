@@ -7,6 +7,9 @@ export default function PastRoutes({
   setSelected,
   setRadius,
   setStops,
+  setWaypoints,
+  setDirectionsResponse,
+  setBars,
 }) {
   const [shouldReload, setShouldReload] = useState(true);
   const [prevRoutes, setPrevRoutes] = useState([]);
@@ -45,6 +48,9 @@ export default function PastRoutes({
             setRadius={setRadius}
             setShouldReload={setShouldReload}
             setStops={setStops}
+            setWaypoints={setWaypoints}
+            setDirectionsResponse={setDirectionsResponse}
+            setBars={setBars}
             key={route._id}
             route={route}
           />

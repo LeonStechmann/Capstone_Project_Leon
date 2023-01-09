@@ -27,6 +27,9 @@ export default function BarList({
             })[index]
         )
         .map((bar, index) => {
+          if (!bar) {
+            return null;
+          }
           return (
             <Fragment key={`${bar.place_id}_${index}`}>
               {directionsResponse &&

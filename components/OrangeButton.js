@@ -24,7 +24,7 @@ const StyledButton = styled.button`
   -webkit-transition-duration: 0.4s;
 
   &.plan {
-    width: 100%;
+    width: 35%;
   }
   &.more {
     margin: 1.4em 0 15vh 0;

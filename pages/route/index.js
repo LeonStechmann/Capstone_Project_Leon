@@ -1,6 +1,6 @@
 import styled, {keyframes} from "styled-components";
 import {useState, useEffect} from "react";
-import beer from "../../public/lotties/beer.json";
+import animationDataBeer from "../../public/lotties/beer.json";
 import Lottie from "react-lottie";
 import Map from "../../components/Map";
 import BarList from "../../components/BarList";
@@ -24,6 +24,14 @@ export default function CurrentRoute({
   const [route, setRoute] = useState({});
   const [showContent, setShowContent] = useState(false);
   const [disabled, setDisabled] = useState(false);
+
+  const defaultOptionsBeer = {
+    loop: false,
+    animationData: animationDataBeer,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   const eventListeners = [
     {
@@ -57,7 +65,7 @@ export default function CurrentRoute({
                 );
               })[index]
           )
-          .map(bar => bar.name),
+          .map(bar => (bar ? bar.name : null)),
       });
   }, [directionsResponse]);
 
@@ -83,6 +91,9 @@ export default function CurrentRoute({
   };
 
   const isWaypoint = bar => {
+    if (!bar || !bar.geometry || !bar.geometry.location) {
+      return false;
+    }
     return waypoints.some(
       waypoint =>
         waypoint.location.lat === bar.geometry.location.lat() &&
@@ -96,13 +107,7 @@ export default function CurrentRoute({
   return (
     <>
       {!showContent && (
-        <Lottie
-          options={{
-            animationData: beer,
-            loop: false,
-          }}
-          eventListeners={eventListeners}
-        />
+        <Lottie options={defaultOptionsBeer} eventListeners={eventListeners} />
       )}
       {showContent && (
         <RouteContainer className={showContent ? "animated" : ""}>

@@ -10,6 +10,9 @@ export default function RouteCard({
   setRadius,
   setStops,
   setShouldReload,
+  setDirectionsResponse,
+  setWaypoints,
+  setBars,
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
@@ -36,13 +39,16 @@ export default function RouteCard({
         setSelectedDest(data.selectedDest);
         setRadius(data.radius);
         setStops(data.stops);
+        setWaypoints([]);
+        setDirectionsResponse(null);
+        setBars([]);
       } else {
         throw new Error(`Fetch fehlgeschlagen mit Status ${response.status}`);
       }
     } catch (error) {
       alert(error.message);
     }
-    router.replace("/route");
+    router.push("/route");
   };
 
   return (
