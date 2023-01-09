@@ -2,7 +2,13 @@ import styled from "styled-components";
 import {useState} from "react";
 import BarDetails from "./BarDetails";
 
-export default function BarCard({bar, waypoints, setWaypoints, isWaypoint}) {
+export default function BarCard({
+  bar,
+  index,
+  waypoints,
+  setWaypoints,
+  isWaypoint,
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleDeleteWaypointFromRoute = location => {
@@ -29,7 +35,12 @@ export default function BarCard({bar, waypoints, setWaypoints, isWaypoint}) {
       isWaypoint={isWaypoint(bar)}
       onClick={() => setIsExpanded(!isExpanded)}
     >
-      <BarDetails bar={bar} isExpanded={isExpanded} isWaypoint={isWaypoint} />
+      <BarDetails
+        bar={bar}
+        index={index}
+        isExpanded={isExpanded}
+        isWaypoint={isWaypoint}
+      />
       {!isWaypoint(bar) ? (
         <AddOrDeleteButton
           onClick={event => {

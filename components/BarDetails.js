@@ -5,12 +5,26 @@ import loading from "../public/lotties/loading.json";
 import challenges from "../_data/challenges.json";
 import Barrating from "./Barrating";
 
-export default function BarDetails({bar, isExpanded, isWaypoint}) {
+export default function BarDetails({bar, index, isExpanded, isWaypoint}) {
   const [isLoading, setIsLoading] = useState(true);
+
   const randomId = Math.floor(Math.random() * 15) + 1;
+
+  const defaultOptionsLoading = {
+    animationData: loading,
+    loop: true,
+    height: 30,
+    width: 30,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
   return (
     <BarDetailsContainer>
-      <BarName>{bar.name}</BarName>
+      <BarName>
+        {index || index === 0 ? `${index + 1}.` : ""} {bar.name}
+      </BarName>
       {isExpanded && (
         <>
           {!isLoading && (
@@ -22,16 +36,7 @@ export default function BarDetails({bar, isExpanded, isWaypoint}) {
           )}
 
           <ChallengeContainer>
-            {isLoading && (
-              <Lottie
-                options={{
-                  animationData: loading,
-                  loop: true,
-                  height: 30,
-                  width: 30,
-                }}
-              />
-            )}
+            {isLoading && <Lottie options={defaultOptionsLoading} />}
             <StyledImage
               src={bar.url ? `${bar.url}` : "/assets/barfallbackimage.jpg"}
               width={bar.url ? bar.photos[0].width : "6em"}

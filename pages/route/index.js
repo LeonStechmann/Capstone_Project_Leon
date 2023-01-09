@@ -1,6 +1,7 @@
 import styled, {keyframes} from "styled-components";
 import {useState, useEffect} from "react";
 import animationDataBeer from "../../public/lotties/beer.json";
+import animationDataDrinks from "../../public/lotties/drinks.json";
 import Lottie from "react-lottie";
 import Map from "../../components/Map";
 import BarList from "../../components/BarList";
@@ -28,6 +29,14 @@ export default function CurrentRoute({
   const defaultOptionsBeer = {
     loop: false,
     animationData: animationDataBeer,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  const defaultOptionsDrinks = {
+    loop: true,
+    animationData: animationDataDrinks,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -102,7 +111,12 @@ export default function CurrentRoute({
   };
 
   if (!selected || !radius || !stops)
-    return <Fallbacktex>get going, plan a route!</Fallbacktex>;
+    return (
+      <>
+        <Fallbacktex>Get going, plan a route!</Fallbacktex>
+        <Lottie options={defaultOptionsDrinks} />
+      </>
+    );
 
   return (
     <>

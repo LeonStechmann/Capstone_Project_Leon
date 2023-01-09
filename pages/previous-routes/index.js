@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import {useState, useEffect} from "react";
 import RouteCard from "../../components/RouteCard";
+import loading from "../../public/lotties/loading.json";
+import Lottie from "react-lottie";
 
 export default function PastRoutes({
   setSelectedDest,
@@ -13,6 +15,14 @@ export default function PastRoutes({
 }) {
   const [shouldReload, setShouldReload] = useState(true);
   const [prevRoutes, setPrevRoutes] = useState([]);
+
+  const defaultOptionsLoading = {
+    animationData: loading,
+    loop: true,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   useEffect(() => {
     const getRoutes = async () => {
@@ -40,6 +50,7 @@ export default function PastRoutes({
   return (
     <Container>
       <Headline>Previous Routes</Headline>
+      {shouldReload && <Lottie options={defaultOptionsLoading} />}
       {prevRoutes.map(route => {
         return (
           <RouteCard

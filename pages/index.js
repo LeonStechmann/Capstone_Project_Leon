@@ -6,6 +6,7 @@ import OrangeButton from "../components/OrangeButton";
 
 export default function Home({
   isLoaded,
+  selected,
   setSelected,
   setSelectedDest,
   setWaypoints,
@@ -19,10 +20,20 @@ export default function Home({
   const router = useRouter();
 
   const handlePlanRouteClick = () => {
-    setWaypoints([]);
-    setBars([]);
-    setDirectionsResponse(null);
-    router.push("/route");
+    if (!radius) {
+      window.alert("Please set a radius");
+    } else if (!selected) {
+      window.alert("Please set a Starting Point");
+    } else if (!stops) {
+      window.alert(
+        "Please set the amount of stops / bars you want on your route!"
+      );
+    } else {
+      setWaypoints([]);
+      setBars([]);
+      setDirectionsResponse(null);
+      router.push("/route");
+    }
   };
 
   return (
@@ -39,7 +50,6 @@ export default function Home({
       ) : (
         "Loading..."
       )}
-
       <OrangeButton
         text={"Plan Route"}
         name={"plan"}
