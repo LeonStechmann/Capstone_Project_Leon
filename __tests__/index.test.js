@@ -1,13 +1,12 @@
 import {render, screen} from "@testing-library/react";
-
-import PastRoutes from "../pages/previous-routes";
 import "@testing-library/jest-dom";
+import Header from "../components/Header";
 
-describe("PasRoutes", () => {
-  it("renders invisible h1.", () => {
-    render(<PastRoutes />);
+describe("Home", () => {
+  it("renders image", () => {
+    render(<Header />);
 
-    const heading = screen.getByRole("heading");
+    const heading = screen.getByRole("img");
 
     expect(heading).toBeInTheDocument();
   });
