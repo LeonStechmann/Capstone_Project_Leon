@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import {useState} from "react";
-import Image from "next/image";
 import Lottie from "react-lottie";
 import loading from "../public/lotties/loading.json";
 import challenges from "../_data/challenges.json";
@@ -93,7 +92,7 @@ const ChallengeContainer = styled.div`
   align-items: center;
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled.img`
   width: 6em;
   height: 6em;
   border-radius: 15px;
