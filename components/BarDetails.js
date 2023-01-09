@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import {useState} from "react";
-import Image from "next/image";
-import barfallbackimage from "../public/assets/barfallbackimage.jpg";
 import Lottie from "react-lottie";
 import loading from "../public/lotties/loading.json";
 import challenges from "../_data/challenges.json";
@@ -35,7 +33,7 @@ export default function BarDetails({bar, isExpanded, isWaypoint}) {
               />
             )}
             <StyledImage
-              src={bar.url ? `${bar.url}` : barfallbackimage}
+              src={bar.url ? `${bar.url}` : "/assets/barfallbackimage.jpg"}
               width={bar.url ? bar.photos[0].width : "6em"}
               height={bar.url ? bar.photos[0].height : "6em"}
               alt={`Picture of the bar: ${bar.name}`}
@@ -94,7 +92,7 @@ const ChallengeContainer = styled.div`
   align-items: center;
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled.img`
   width: 6em;
   height: 6em;
   border-radius: 15px;
