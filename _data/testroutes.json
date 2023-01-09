@@ -1,0 +1,22 @@
+[
+  {
+    "start": "Vogelweide 21, 22081 Hamburg",
+    "destination": "Vogelweide 2, 22081 Hamburg",
+    "stops": 4,
+    "radius": 1500,
+    "bars": [
+      {"name": "barbarabar", "location": "Legoland"},
+      {"name": "wunderBar", "location": "Auenland"}
+    ]
+  },
+  {
+    "start": "Eulenkamp 10, 22049 Hamburg",
+    "destination": "Vogelweide 2, 22081 Hamburg",
+    "stops": 6,
+    "radius": 2000,
+    "bars": [
+      {"name": "barbarabar", "location": "Legoland"},
+      {"name": "wunderBar", "location": "Auenland"}
+    ]
+  }
+]

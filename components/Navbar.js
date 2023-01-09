@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHouse} from "@fortawesome/free-solid-svg-icons";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {faRoute} from "@fortawesome/free-solid-svg-icons";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 
@@ -15,8 +15,7 @@ export default function Navigation() {
         <ListItems>
           <Link href="/">
             <FontAwesomeIcon
-              icon={faHouse}
-              title="home icon"
+              icon={faMagnifyingGlass}
               color={router.pathname === "/" ? "black" : "grey"}
             />
           </Link>
@@ -25,7 +24,6 @@ export default function Navigation() {
           <Link href="/route">
             <FontAwesomeIcon
               icon={faRoute}
-              title="route icon"
               color={router.pathname === "/route" ? "black" : "grey"}
             />
           </Link>
@@ -34,7 +32,6 @@ export default function Navigation() {
           <Link href="/previous-routes">
             <FontAwesomeIcon
               icon={faBars}
-              title="menu icon"
               color={router.pathname === "/previous-routes" ? "black" : "grey"}
             />
           </Link>

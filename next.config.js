@@ -7,6 +7,9 @@ const nextConfig = {
   eslint: {
     dirs: ["pages", "components", "styles"],
   },
+  images: {
+    domains: ["maps.googleapis.com"],
+  },
 };
 
 module.exports = nextConfig;
