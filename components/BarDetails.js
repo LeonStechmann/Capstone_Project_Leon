@@ -37,14 +37,21 @@ export default function BarDetails({bar, index, isExpanded, isWaypoint}) {
 
           <ChallengeContainer>
             {isLoading && <Lottie options={defaultOptionsLoading} />}
-            <StyledImage
-              src={bar.url ? `${bar.url}` : "/assets/barfallbackimage.jpg"}
-              width={bar.url ? bar.photos[0].width : "6em"}
-              height={bar.url ? bar.photos[0].height : "6em"}
-              alt={`Picture of the bar: ${bar.name}`}
-              onLoad={() => setIsLoading(false)}
-              style={{opacity: isLoading ? 0 : 1}}
-            />
+            <ImageContainer>
+              <StyledImage
+                src={bar.url ? `${bar.url}` : "/assets/barfallbackimage.jpg"}
+                width={bar.url ? bar.photos[0].width : "6em"}
+                height={bar.url ? bar.photos[0].height : "6em"}
+                alt={`Picture of the bar: ${bar.name}`}
+                onLoad={() => setIsLoading(false)}
+                style={{opacity: isLoading ? 0 : 1}}
+              />
+              {!isLoading && (
+                <BarAddress>
+                  {bar.vicinity.substring(0, bar.vicinity.indexOf(","))}
+                </BarAddress>
+              )}
+            </ImageContainer>
             {!isLoading && isWaypoint(bar) && (
               <Challenge>
                 <span style={{fontWeight: "bold"}}>Challenge:</span>
@@ -55,11 +62,6 @@ export default function BarDetails({bar, index, isExpanded, isWaypoint}) {
               </Challenge>
             )}
           </ChallengeContainer>
-          {!isLoading && (
-            <BarAddress>
-              {bar.vicinity.substring(0, bar.vicinity.indexOf(","))}
-            </BarAddress>
-          )}
         </>
       )}
     </BarDetailsContainer>
@@ -67,9 +69,11 @@ export default function BarDetails({bar, index, isExpanded, isWaypoint}) {
 }
 
 const BarAddress = styled.p`
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   max-width: 6em;
   overflow-wrap: break-word;
+  margin: 0;
+  text-align: center;
 `;
 
 const BarDetailsContainer = styled.div`
@@ -93,10 +97,14 @@ const Challenge = styled.p`
 
 const ChallengeContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 `;
-
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+`;
 const StyledImage = styled.img`
   width: 6em;
   height: 6em;
