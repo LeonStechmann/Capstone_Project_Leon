@@ -98,7 +98,7 @@ const Challenge = styled.p`
 const ChallengeContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
 `;
 const ImageContainer = styled.div`
   display: flex;
