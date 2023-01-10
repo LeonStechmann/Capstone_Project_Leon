@@ -5,12 +5,26 @@ import loading from "../public/lotties/loading.json";
 import challenges from "../_data/challenges.json";
 import Barrating from "./Barrating";
 
-export default function BarDetails({bar, isExpanded, isWaypoint}) {
+export default function BarDetails({bar, index, isExpanded, isWaypoint}) {
   const [isLoading, setIsLoading] = useState(true);
+
   const randomId = Math.floor(Math.random() * 15) + 1;
+
+  const defaultOptionsLoading = {
+    animationData: loading,
+    loop: true,
+    height: 30,
+    width: 30,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
   return (
     <BarDetailsContainer>
-      <BarName>{bar.name}</BarName>
+      <BarName>
+        {index || index === 0 ? `${index + 1}.` : ""} {bar.name}
+      </BarName>
       {isExpanded && (
         <>
           {!isLoading && (
@@ -22,27 +36,25 @@ export default function BarDetails({bar, isExpanded, isWaypoint}) {
           )}
 
           <ChallengeContainer>
-            {isLoading && (
-              <Lottie
-                options={{
-                  animationData: loading,
-                  loop: true,
-                  height: 30,
-                  width: 30,
-                }}
+            {isLoading && <Lottie options={defaultOptionsLoading} />}
+            <ImageContainer>
+              <StyledImage
+                src={bar.url ? `${bar.url}` : "/assets/barfallbackimage.jpg"}
+                width={bar.url ? bar.photos[0].width : "6em"}
+                height={bar.url ? bar.photos[0].height : "6em"}
+                alt={`Picture of the bar: ${bar.name}`}
+                onLoad={() => setIsLoading(false)}
+                style={{opacity: isLoading ? 0 : 1}}
               />
-            )}
-            <StyledImage
-              src={bar.url ? `${bar.url}` : "/assets/barfallbackimage.jpg"}
-              width={bar.url ? bar.photos[0].width : "6em"}
-              height={bar.url ? bar.photos[0].height : "6em"}
-              alt={`Picture of the bar: ${bar.name}`}
-              onLoad={() => setIsLoading(false)}
-              style={{opacity: isLoading ? 0 : 1}}
-            />
+              {!isLoading && (
+                <BarAddress>
+                  {bar.vicinity.substring(0, bar.vicinity.indexOf(","))}
+                </BarAddress>
+              )}
+            </ImageContainer>
             {!isLoading && isWaypoint(bar) && (
               <Challenge>
-                <span style={{fontWeight: "bold"}}>Challange:</span>
+                <span style={{fontWeight: "bold"}}>Challenge:</span>
                 <br></br>
                 {challenges.map(challenge => {
                   if (challenge.id === randomId) return challenge.challenge;
@@ -50,11 +62,6 @@ export default function BarDetails({bar, isExpanded, isWaypoint}) {
               </Challenge>
             )}
           </ChallengeContainer>
-          {!isLoading && (
-            <BarAddress>
-              {bar.vicinity.substring(0, bar.vicinity.indexOf(","))}
-            </BarAddress>
-          )}
         </>
       )}
     </BarDetailsContainer>
@@ -62,9 +69,11 @@ export default function BarDetails({bar, isExpanded, isWaypoint}) {
 }
 
 const BarAddress = styled.p`
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   max-width: 6em;
   overflow-wrap: break-word;
+  margin: 0;
+  text-align: center;
 `;
 
 const BarDetailsContainer = styled.div`
@@ -88,10 +97,14 @@ const Challenge = styled.p`
 
 const ChallengeContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
-
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+`;
 const StyledImage = styled.img`
   width: 6em;
   height: 6em;

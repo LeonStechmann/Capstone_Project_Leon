@@ -47,6 +47,7 @@ export default function BarList({
               ) : null}
               <BarCard
                 bar={bar}
+                index={index}
                 waypoints={waypoints}
                 setWaypoints={setWaypoints}
                 isWaypoint={isWaypoint}
