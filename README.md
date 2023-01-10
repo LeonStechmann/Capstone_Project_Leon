@@ -1,7 +1,7 @@
 # planBar
 
-> Final project for neuefische web dev bootcamp
-> ![app images](src/public/assets/planBarLogo.jpg)
+> ## ![app images](/public/assets/planBarLogo.png)
+> Final project for neuefische web dev bootcamp 
 
 ## `Description`
 
